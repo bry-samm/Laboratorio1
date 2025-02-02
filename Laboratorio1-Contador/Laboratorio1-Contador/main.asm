@@ -54,15 +54,15 @@ MAIN:
 	//Volver a leer PIND
 	MOV		R17, R16	//Mueve el registro actual al registro previo
 	SBRS	R16, 2		//Salta si el bit 2 de PIND (R16) está en 1
-	RJMP	REVISAR_DEC	//salta a la subrutina 
+	RJMP	REVISAR_SI	//salta a la subrutina 
 	SBRS	R16, 3		//Salta si el bit 3 de PIND está en 1
-	RJMP	REVISAR_INC
+	RJMP	REVISAR_INC_DEC
 
 //Sub-rutina (no de interrupción)
-REVISAR_DEC:			//Sirve para la lógica cuando no se presionan botones
+REVISAR_SI:			//Sirve para la lógica cuando no se presionan botones
 	SBRS	R16, 3
 	RJMP	MAIN		//Regresa al loop principal
-REVISAR_INC:
+REVISAR_INC_DEC:
 	SBRS	R16, 2		//En esta subrutina se selecciona la operación a realizar
 	RJMP	DECREMENTAR
 	RJMP	INCREMENTAR

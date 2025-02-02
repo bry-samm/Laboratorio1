@@ -26,8 +26,8 @@
   <SETUP><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>21</LINE></SETUP>
   <MAIN><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>46</LINE></MAIN>
   <DELAY><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>86</LINE></DELAY>
-  <REVISAR_DEC><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>62</LINE></REVISAR_DEC>
-  <REVISAR_INC><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>65</LINE></REVISAR_INC>
+  <REVISAR_SI><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>62</LINE></REVISAR_SI>
+  <REVISAR_INC_DEC><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>65</LINE></REVISAR_INC_DEC>
   <DECREMENTAR><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>75</LINE></DECREMENTAR>
   <INCREMENTAR><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>69</LINE></INCREMENTAR>
   <ACTUALIZAR><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>82</LINE></ACTUALIZAR>
