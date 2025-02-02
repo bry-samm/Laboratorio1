@@ -33,7 +33,10 @@ SETUP:
 	LDI		R16, 0x00
 	OUT		PORTB, R16	//Apagar puerto B
 
-	LDI R17, 0x00		//Variable para guardar estado de botones
+	LDI		R20, 0x0F	//Variable para guardar valor maximo y comparar (16)
+	LDI		R19, 0x00   //Inicializa el contador en 0
+	LDI		R17, 0x00	//Variable para guardar estado de botones
+
 
 
 
@@ -51,13 +54,44 @@ MAIN:
 	//Volver a leer PIND
 	MOV		R17, R16	//Mueve el registro actual al registro previo
 	SBRS	R16, 2		//Salta si el bit 2 de PIND (R16) está en 1
+	RJMP	DECREMENTAR
 	SBRS	R16, 3		//Salta si el bit 3 de PIND (R16) está en 1
-	DEC		R19			//Disminuye el valor
+	RJMP	INCREMENTAR
+	
+	//DEC		R19			//Disminuye el valor
+	SBRS	R16, 2
 	INC		R19			//Aumenta el valor
-	OUT		PORTB, R19	//Escribe el valor en PORTB
+	CP		R19, R20	//Compara los registros, salta si son diferentes
+	LDI		R19, 0X00
+	CP		R21, R19
+	LDI		R19, 0x0F
+	//OUT		PORTB, R19	//Escribe el valor en PORTB
+	
 	RJMP	MAIN
 
 //Sub-rutina (no de interrupción)
+//Rutina para incrementar el contador
+INCREMENTAR:
+	INC		R19			//Aumenta el valor
+	CPI		R19, 0x10	//Compara el valor máximo (0x0F)
+	BRNE	ACTUALIZAR	//Escribe la salida
+	LDI		R19, 0x00	//Resetea el contador
+	RJMP	ACTUALIZAR
+
+//Rutina para decrementar contador
+DECREMENTAR:
+	CPI		R19, 0x00
+	BREQ	RESET_MAX
+	DEC		R19
+	RJMP	ACTUALIZAR
+
+RESET_MAX:
+	LDI		R19, 0x0F
+	RJMP	ACTUALIZAR
+//Escribir el valor actualizado 
+ACTUALIZAR:
+	OUT		PORTB, R19
+	RJMP	MAIN
 DELAY:		//Antirebote
 	LDI		R18, 0xFF
 SUB_DELAY1:

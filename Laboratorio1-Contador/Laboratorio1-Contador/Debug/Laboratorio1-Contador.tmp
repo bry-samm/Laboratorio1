@@ -24,10 +24,14 @@
  </OUTPUT_FILES>
  <LABELS>
   <SETUP><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>21</LINE></SETUP>
-  <MAIN><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>43</LINE></MAIN>
-  <DELAY><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>58</LINE></DELAY>
-  <SUB_DELAY1><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>60</LINE></SUB_DELAY1>
-  <SUB_DELAY2><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>65</LINE></SUB_DELAY2>
-  <SUB_DELAY3><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>70</LINE></SUB_DELAY3>
+  <MAIN><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>46</LINE></MAIN>
+  <DELAY><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>95</LINE></DELAY>
+  <DECREMENTAR><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>82</LINE></DECREMENTAR>
+  <INCREMENTAR><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>74</LINE></INCREMENTAR>
+  <ACTUALIZAR><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>92</LINE></ACTUALIZAR>
+  <RESET_MAX><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>88</LINE></RESET_MAX>
+  <SUB_DELAY1><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>97</LINE></SUB_DELAY1>
+  <SUB_DELAY2><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>102</LINE></SUB_DELAY2>
+  <SUB_DELAY3><FILE>C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm</FILE><LINE>107</LINE></SUB_DELAY3>
  </LABELS>
 </ASSEMBLER_INFO>
