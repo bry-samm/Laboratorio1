@@ -44,7 +44,7 @@ SETUP:
 //Loop infinito (ciclo infinito)
 //Utilizaré el PIND2 y PIND3 para los botones ----- PINB0 al PINB3 para el resultado del contador (leds)
 MAIN:
-	IN		R16, PIND	//Escribe el valor de PIND en un registro
+ 	IN		R16, PIND	//Escribe el valor de PIND en un registro
 	CP		R17, R16	//Compara los registros, salta si son diferentes
 	BREQ	MAIN		
 	CALL	DELAY
@@ -54,49 +54,40 @@ MAIN:
 	//Volver a leer PIND
 	MOV		R17, R16	//Mueve el registro actual al registro previo
 	SBRS	R16, 2		//Salta si el bit 2 de PIND (R16) está en 1
-	RJMP	DECREMENTAR
-	SBRS	R16, 3		//Salta si el bit 3 de PIND (R16) está en 1
-	RJMP	INCREMENTAR
-	
-	//DEC		R19			//Disminuye el valor
-	SBRS	R16, 2
-	INC		R19			//Aumenta el valor
-	CP		R19, R20	//Compara los registros, salta si son diferentes
-	LDI		R19, 0X00
-	CP		R21, R19
-	LDI		R19, 0x0F
-	//OUT		PORTB, R19	//Escribe el valor en PORTB
-	
-	RJMP	MAIN
+	RJMP	REVISAR_DEC
+	SBRS	R16, 3
+	RJMP	REVISAR_INC
 
 //Sub-rutina (no de interrupción)
-//Rutina para incrementar el contador
+REVISAR_DEC:
+	SBRS	R16, 3
+	RJMP	MAIN
+REVISAR_INC:
+	SBRS	R16, 2
+	RJMP	DECREMENTAR
+	RJMP	INCREMENTAR
 INCREMENTAR:
-	INC		R19			//Aumenta el valor
-	CPI		R19, 0x10	//Compara el valor máximo (0x0F)
-	BRNE	ACTUALIZAR	//Escribe la salida
-	LDI		R19, 0x00	//Resetea el contador
+	INC		R19
+	CPI		R19, 0x10
+	BRNE	ACTUALIZAR
+	LDI		R19, 0x00
 	RJMP	ACTUALIZAR
-
-//Rutina para decrementar contador
 DECREMENTAR:
 	CPI		R19, 0x00
-	BREQ	RESET_MAX
+	BREQ	SET_MAX
 	DEC		R19
 	RJMP	ACTUALIZAR
-
-RESET_MAX:
+SET_MAX:
 	LDI		R19, 0x0F
-	RJMP	ACTUALIZAR
-//Escribir el valor actualizado 
 ACTUALIZAR:
-	OUT		PORTB, R19
+	OUT		PORTB,R19
 	RJMP	MAIN
+
 DELAY:		//Antirebote
 	LDI		R18, 0xFF
 SUB_DELAY1:
 	DEC		R18
-	CPI		R18, 0
+	CPI		R18, 0		//Compara, salta si son iguales
 	BRNE	SUB_DELAY1
 	LDI		R18, 0xFF
 SUB_DELAY2:

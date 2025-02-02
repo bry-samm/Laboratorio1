@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm Sat Feb 01 22:12:12 2025
+AVRASM ver. 2.2.8  C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm Sun Feb 02 00:13:05 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
 C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm(8): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.inc'
@@ -1078,68 +1078,59 @@ C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Lab
 00000f b109                      	IN		R16, PIND	//Escribe el valor de PIND en un registro
 000010 1710                      	CP		R17, R16	//Compara los registros, salta si son diferentes
 000011 f3e9                      	BREQ	MAIN		
-000012 940e 0030                 	CALL	DELAY
+000012 940e 002d                 	CALL	DELAY
 000014 b109                      	IN		R16, PIND	
 000015 1710                      	CP		R17, R16			
 000016 f3c1                      	BREQ	MAIN
                                  	//Volver a leer PIND
 000017 2f10                      	MOV		R17, R16	//Mueve el registro actual al registro previo
 000018 ff02                      	SBRS	R16, 2		//Salta si el bit 2 de PIND (R16) está en 1
-000019 c00e                      	RJMP	DECREMENTAR
-00001a ff03                      	SBRS	R16, 3		//Salta si el bit 3 de PIND (R16) está en 1
-00001b c007                      	RJMP	INCREMENTAR
-                                 	
-                                 	//DEC		R19			//Disminuye el valor
-00001c ff02                      	SBRS	R16, 2
-00001d 9533                      	INC		R19			//Aumenta el valor
-00001e 1734                      	CP		R19, R20	//Compara los registros, salta si son diferentes
-00001f e030                      	LDI		R19, 0X00
-000020 1753                      	CP		R21, R19
-000021 e03f                      	LDI		R19, 0x0F
-                                 	//OUT		PORTB, R19	//Escribe el valor en PORTB
-                                 	
-000022 cfec                      	RJMP	MAIN
+000019 c002                      	RJMP	REVISAR_DEC
+00001a ff03                      	SBRS	R16, 3
+00001b c002                      	RJMP	REVISAR_INC
                                  
                                  //Sub-rutina (no de interrupción)
-                                 //Rutina para incrementar el contador
+                                 REVISAR_DEC:
+00001c ff03                      	SBRS	R16, 3
+00001d cff1                      	RJMP	MAIN
+                                 REVISAR_INC:
+00001e ff02                      	SBRS	R16, 2
+00001f c006                      	RJMP	DECREMENTAR
+000020 c000                      	RJMP	INCREMENTAR
                                  INCREMENTAR:
-000023 9533                      	INC		R19			//Aumenta el valor
-000024 3130                      	CPI		R19, 0x10	//Compara el valor máximo (0x0F)
-000025 f441                      	BRNE	ACTUALIZAR	//Escribe la salida
-000026 e030                      	LDI		R19, 0x00	//Resetea el contador
-000027 c006                      	RJMP	ACTUALIZAR
-                                 
-                                 //Rutina para decrementar contador
+000021 9533                      	INC		R19
+000022 3130                      	CPI		R19, 0x10
+000023 f439                      	BRNE	ACTUALIZAR
+000024 e030                      	LDI		R19, 0x00
+000025 c005                      	RJMP	ACTUALIZAR
                                  DECREMENTAR:
-000028 3030                      	CPI		R19, 0x00
-000029 f011                      	BREQ	RESET_MAX
-00002a 953a                      	DEC		R19
-00002b c002                      	RJMP	ACTUALIZAR
-                                 
-                                 RESET_MAX:
-00002c e03f                      	LDI		R19, 0x0F
-00002d c000                      	RJMP	ACTUALIZAR
-                                 //Escribir el valor actualizado 
+000026 3030                      	CPI		R19, 0x00
+000027 f011                      	BREQ	SET_MAX
+000028 953a                      	DEC		R19
+000029 c001                      	RJMP	ACTUALIZAR
+                                 SET_MAX:
+00002a e03f                      	LDI		R19, 0x0F
                                  ACTUALIZAR:
-00002e b935                      	OUT		PORTB, R19
-00002f cfdf                      	RJMP	MAIN
+00002b b935                      	OUT		PORTB,R19
+00002c cfe2                      	RJMP	MAIN
+                                 
                                  DELAY:		//Antirebote
-000030 ef2f                      	LDI		R18, 0xFF
+00002d ef2f                      	LDI		R18, 0xFF
                                  SUB_DELAY1:
-000031 952a                      	DEC		R18
-000032 3020                      	CPI		R18, 0
-000033 f7e9                      	BRNE	SUB_DELAY1
-000034 ef2f                      	LDI		R18, 0xFF
+00002e 952a                      	DEC		R18
+00002f 3020                      	CPI		R18, 0		//Compara, salta si son iguales
+000030 f7e9                      	BRNE	SUB_DELAY1
+000031 ef2f                      	LDI		R18, 0xFF
                                  SUB_DELAY2:
-000035 952a                      	DEC		R18
-000036 3020                      	CPI		R18, 0
-000037 f7e9                      	BRNE	SUB_DELAY2
-000038 ef2f                      	LDI		R18, 0xFF
+000032 952a                      	DEC		R18
+000033 3020                      	CPI		R18, 0
+000034 f7e9                      	BRNE	SUB_DELAY2
+000035 ef2f                      	LDI		R18, 0xFF
                                  SUB_DELAY3:
-000039 952a                      	DEC		R18
-00003a 3020                      	CPI		R18, 0
-00003b f7e9                      	BRNE	SUB_DELAY3
-00003c 9508                      	RET
+000036 952a                      	DEC		R18
+000037 3020                      	CPI		R18, 0
+000038 f7e9                      	BRNE	SUB_DELAY3
+000039 9508                      	RET
                                  
 
 
@@ -1160,10 +1151,10 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  20 r17:   4 r18:   9 r19:  13 r20:   2 
-r21:   1 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
+r13:   0 r14:   0 r15:   0 r16:  21 r17:   4 r18:   9 r19:   8 r20:   1 
+r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 6 out of 35 (17.1%)
+Registers used: 5 out of 35 (14.3%)
 
 "ATmega328P" instruction use summary:
 .lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
@@ -1173,15 +1164,15 @@ brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0
 brne  :   4 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   1 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   4 cpc   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   2 cpc   :   0 
 cpi   :   5 cpse  :   0 dec   :   4 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   2 inc   :   2 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  16 lds   :   0 lpm   :   0 lsl   :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   2 inc   :   1 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :  14 lds   :   0 lpm   :   0 lsl   :   0 
 lsr   :   0 mov   :   1 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
 neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   7 pop   :   0 
-push  :   0 rcall :   0 ret   :   1 reti  :   0 rjmp  :   7 rol   :   0 
+push  :   0 rcall :   0 ret   :   1 reti  :   0 rjmp  :   8 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
-sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   3 sec   :   0 seh   :   0 
+sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   4 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
@@ -1190,7 +1181,7 @@ Instructions used: 14 out of 113 (12.4%)
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00007a    122      0    122   32768   0.4%
+[.cseg] 0x000000 0x000074    116      0    116   32768   0.4%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
