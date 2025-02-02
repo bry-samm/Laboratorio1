@@ -34,7 +34,7 @@ SETUP:
 	OUT		PORTB, R16	//Apagar puerto B
 
 	LDI		R20, 0x0F	//Variable para guardar valor maximo y comparar (16)
-	LDI		R19, 0x00   //Inicializa el contador en 0
+	LDI		R19, 0x00   //Inicializa el contador en 0, valor de contador 
 	LDI		R17, 0x00	//Variable para guardar estado de botones
 
 
@@ -46,42 +46,42 @@ SETUP:
 MAIN:
  	IN		R16, PIND	//Escribe el valor de PIND en un registro
 	CP		R17, R16	//Compara los registros, salta si son diferentes
-	BREQ	MAIN		
-	CALL	DELAY
-	IN		R16, PIND	
+	BREQ	MAIN		//Regresa al loop principal
+	CALL	DELAY		//LLama a la subrutina DELAY
+	IN		R16, PIND	//Coloca el valor del PIND en R16
 	CP		R17, R16			
 	BREQ	MAIN
 	//Volver a leer PIND
 	MOV		R17, R16	//Mueve el registro actual al registro previo
 	SBRS	R16, 2		//Salta si el bit 2 de PIND (R16) está en 1
-	RJMP	REVISAR_DEC
-	SBRS	R16, 3
+	RJMP	REVISAR_DEC	//salta a la subrutina 
+	SBRS	R16, 3		//Salta si el bit 3 de PIND está en 1
 	RJMP	REVISAR_INC
 
 //Sub-rutina (no de interrupción)
-REVISAR_DEC:
+REVISAR_DEC:			//Sirve para la lógica cuando no se presionan botones
 	SBRS	R16, 3
-	RJMP	MAIN
+	RJMP	MAIN		//Regresa al loop principal
 REVISAR_INC:
-	SBRS	R16, 2
+	SBRS	R16, 2		//En esta subrutina se selecciona la operación a realizar
 	RJMP	DECREMENTAR
 	RJMP	INCREMENTAR
 INCREMENTAR:
-	INC		R19
-	CPI		R19, 0x10
-	BRNE	ACTUALIZAR
-	LDI		R19, 0x00
+	INC		R19			//Incrementa R19
+	CPI		R19, 0x10	//Verifica si sobrepasa el valor máximo
+	BRNE	ACTUALIZAR	//Actualiza el valor
+	LDI		R19, 0x00	//Si R19 sobrepasa el valor máximo se resetea
 	RJMP	ACTUALIZAR
 DECREMENTAR:
-	CPI		R19, 0x00
-	BREQ	SET_MAX
-	DEC		R19
+	CPI		R19, 0x00	//Verifica si se encuentra en el valor mínimo, si no este salta
+	BREQ	SET_MAX		//Subrutina
+	DEC		R19			//Disminuye el valor de R19
 	RJMP	ACTUALIZAR
 SET_MAX:
-	LDI		R19, 0x0F
+	LDI		R19, 0x0F	//Si baja más del valor mínimo se setea en 0x0F (valor máximo)
 ACTUALIZAR:
-	OUT		PORTB,R19
-	RJMP	MAIN
+	OUT		PORTB,R19	//Coloca el valor del contador en el puerto B
+	RJMP	MAIN		//Regresa al loop principal
 
 DELAY:		//Antirebote
 	LDI		R18, 0xFF
