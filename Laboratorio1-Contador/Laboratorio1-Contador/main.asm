@@ -9,9 +9,9 @@
 .cseg
 .org 0x0000
 
-/********************************************************/
+/******************************************************************/
 //Configuración de la pila 
-/********************************************************/
+/*****************************************************************/
 	LDI		R16, LOW(RAMEND)
 	OUT		SPL, R16		// SPL 
 	LDI		R16, HIGH(RAMEND)
@@ -23,7 +23,7 @@ SETUP:
 	//Le voy a hablar a todo el puerto B y no un solo bit, por simplicidad
 	//PORTB como entrada
 	LDI		R16, 0x00
-	OUT		DDRDB, R16	//Setear puerto B como entrada
+	OUT		DDRB, R16	//Setear puerto B como entrada
 	LDI		R16, 0xFF
 	OUT		PORTB, R16	//Habilidar pull-up en puerto B
 
@@ -38,65 +38,74 @@ SETUP:
 //====================================================================================
 //Establecer valores iniciales de algunos registros
 
-	LDI		R21, 0x00	//Iinica el contador 2 en 0
-	LDI		R20, 0x0F	//Variable para guardar valor maximo y comparar (16)
+	LDI		R20, 0x00	//Iniciar el contador 2 en 0
 	LDI		R19, 0x00   //Inicializa el contador 1 en 0
 	LDI		R17, 0x00	//Variable para guardar estado de botones
 
 //Loop infinito (ciclo infinito)
 MAIN:
- 	IN		R16, PIND	//Escribe el valor de PIND en un registro
+ 	IN		R16, PINB	//Escribe el valor de PIND en un registro
 	CP		R17, R16	//Compara los registros, salta si son diferentes
 	BREQ	MAIN		//Regresa al loop principal
 	CALL	DELAY		//LLama a la subrutina DELAY
-	IN		R16, PIND	//Coloca el valor del PIND en R16
+	IN		R16, PINB	//Coloca el valor del PIND en R16
 	CP		R17, R16			
 	BREQ	MAIN
 	//Volver a leer PIND
 	MOV		R17, R16	//Mueve el registro actual al registro previo
-	SBIS	PINB, 0
-	CALL	SUM_1
 	SBIS	PINB, 1
+	CALL	SUM_1
+	SBIS	PINB, 0
 	CALL	RESTA_1
-	SBIS	PINB, 2
-	CALL	SUM_2
 	SBIS	PINB, 3
+	CALL	SUM_2
+	SBIS	PINB, 2
 	CALL	RESTA_2
+	//Muestro los datos en el PORTB
+	MOV		R21, R20
+	LSL		R21
+	LSL		R21
+	LSL		R21
+	LSL		R21
+	ADD		R21, R19
+	OUT		PORTD, R21 	
 	RJMP	MAIN
 
 //Sub-rutina (no de interrupción)
 
+SUM_1:
+    INC     R19           ; Incrementar R19
+    CPI     R19, 0x10     ; ¿Llegó a 0x10 (fuera del rango 0x00 - 0x0F)?
+    BRNE    FIN_SUM_1     ; Si no, continuar
+    LDI     R19, 0x00     ; Si sí, reiniciar a 0
+FIN_SUM_1:
+    RET
 
+RESTA_1:
+    CPI     R19, 0x00     ; ¿Está en 0?
+    BREQ    SET_MAX_1     ; Si sí, colocar en 0x0F
+    DEC     R19           ; Decrementar
+    RET
+SET_MAX_1:
+    LDI     R19, 0x0F
+    RET
 
+SUM_2:
+    INC     R20           ; Incrementar R20
+    CPI     R20, 0x10     ; ¿Llegó a 0x10 (fuera del rango 0x00 - 0x0F)?
+    BRNE    FIN_SUM_2     ; Si no, continuar
+    LDI     R20, 0x00     ; Si sí, reiniciar a 0
+FIN_SUM_2:
+    RET
 
-
-//Sub-rutina (no de interrupción)
-REVISAR_SI:			//Sirve para la lógica cuando no se presionan botones
-	SBRS	R16, 3
-	RJMP	MAIN		//Regresa al loop principal
-REVISAR_INC_DEC:
-	SBRS	R16, 2		//En esta subrutina se selecciona la operación a realizar
-	RJMP	DECREMENTAR
-	RJMP	INCREMENTAR
-INCREMENTAR:
-	INC		R19			//Incrementa R19
-	CPI		R19, 0x10	//Verifica si sobrepasa el valor máximo
-	BRNE	ACTUALIZAR	//Actualiza el valor
-	LDI		R19, 0x00	//Si R19 sobrepasa el valor máximo se resetea
-	RJMP	ACTUALIZAR
-DECREMENTAR:
-	CPI		R19, 0x00	//Verifica si se encuentra en el valor mínimo, si no este salta
-	BREQ	SET_MAX		//Subrutina
-	DEC		R19			//Disminuye el valor de R19
-	RJMP	ACTUALIZAR
-SET_MAX:
-	LDI		R19, 0x0F	//Si baja más del valor mínimo se setea en 0x0F (valor máximo)
-ACTUALIZAR:
-	OUT		PORTB,R19	//Coloca el valor del contador en el puerto B
-	RJMP	MAIN		//Regresa al loop principal
-
-
-
+RESTA_2:
+    CPI     R20, 0x00     ; ¿Está en 0?
+    BREQ    SET_MAX_2     ; Si sí, colocar en 0x0F
+    DEC     R20           ; Decrementar
+    RET
+SET_MAX_2:
+    LDI     R20, 0x0F
+    RET
 
 //=====================================================================================
 

@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm Mon Feb 03 18:00:12 2025
+AVRASM ver. 2.2.8  C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm Tue Feb 04 23:16:29 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
 C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm(8): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.inc'
@@ -992,7 +992,7 @@ C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Lab
                                  ; Created: 01/02/2025
                                  //Encabezado 
                                  //Bryan Samuel Morales Paredes 23283
-                                 // Este código es un contador binario de 4 bits
+                                 // Este código es un contador doble binario de 4 bits el cual puede generar la suma de los contadores
                                  .include "M328PDEF.inc"
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega328P.xml **********
@@ -1040,104 +1040,123 @@ C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Lab
                                  .cseg
                                  .org 0x0000
                                  
-                                 /********************************************************/
+                                 /******************************************************************/
                                  //Configuración de la pila 
-                                 /********************************************************/
+                                 /*****************************************************************/
 000000 ef0f                      	LDI		R16, LOW(RAMEND)
 000001 bf0d                      	OUT		SPL, R16		// SPL 
 000002 e008                      	LDI		R16, HIGH(RAMEND)
 000003 bf0e                      	OUT		SPH, R16		// SPH 
-                                 
+                                 //=================================================================================
                                  //Configurar el microcontrolador (MCU)
                                  SETUP:
                                  	//Configurar pines de entrada y salida (DDRx, PORTx, PINx)
-                                 	//Le voy a hablar a todo el puerto D y no un solo bit, por simplicidad
-                                 	//PORTD como entrada y PORTB como salida
+                                 	//Le voy a hablar a todo el puerto B y no un solo bit, por simplicidad
+                                 	//PORTB como entrada
 000004 e000                      	LDI		R16, 0x00
-000005 b90a                      	OUT		DDRD, R16	//Setear puerto D como entrada
+000005 b904                      	OUT		DDRB, R16	//Setear puerto B como entrada
 000006 ef0f                      	LDI		R16, 0xFF
-000007 b90b                      	OUT		PORTD, R16	//Habilidar pull-up en puerto D
-                                 	
-                                 	//PORTB como salida inicialmente apagado 
-000008 ef0f                      	LDI		R16, 0xFF
-000009 b904                      	OUT		DDRB, R16	//Setear puerto B como salida
-00000a b907                      	OUT		DDRC, R16	//Setear puerto C como salida
-00000b e000                      	LDI		R16, 0x00
-00000c b905                      	OUT		PORTB, R16	//Apagar puerto B
+000007 b905                      	OUT		PORTB, R16	//Habilidar pull-up en puerto B
                                  
-00000d e04f                      	LDI		R20, 0x0F	//Variable para guardar valor maximo y comparar (16)
-00000e e030                      	LDI		R19, 0x00   //Inicializa el contador en 0, valor de contador 
-00000f e010                      	LDI		R17, 0x00	//Variable para guardar estado de botones
-                                 	//Registros ya usados, R18
+                                 	
+                                 	//PORTD y PORTC como salida inicialmente apagado 
+000008 ef0f                      	LDI		R16, 0xFF
+000009 b907                      	OUT		DDRC, R16	//Setear puerto C como salida
+00000a b90a                      	OUT		DDRD, R16	//Setear puerto D como salida 
+00000b e000                      	LDI		R16, 0x00
+00000c b908                      	OUT		PORTC, R16	//Apagar puerto C
+00000d b90b                      	OUT		PORTD, R16	//Apagar puerto D
+                                 //====================================================================================
+                                 //Establecer valores iniciales de algunos registros
+                                 
+00000e e040                      	LDI		R20, 0x00	//Iniciar el contador 2 en 0
+00000f e030                      	LDI		R19, 0x00   //Inicializa el contador 1 en 0
+000010 e010                      	LDI		R17, 0x00	//Variable para guardar estado de botones
                                  
                                  //Loop infinito (ciclo infinito)
-                                 //Utilizaré el PIND2 y PIND3 para los botones ----- PINB0 al PINB3 para el resultado del contador (leds)
                                  MAIN:
-000010 b109                       	IN		R16, PIND	//Escribe el valor de PIND en un registro
-000011 1710                      	CP		R17, R16	//Compara los registros, salta si son diferentes
-000012 f3e9                      	BREQ	MAIN		//Regresa al loop principal
-000013 940e 0031                 	CALL	DELAY		//LLama a la subrutina DELAY
-000015 b109                      	IN		R16, PIND	//Coloca el valor del PIND en R16
-000016 1710                      	CP		R17, R16			
-000017 f3c1                      	BREQ	MAIN
+000011 b103                       	IN		R16, PINB	//Escribe el valor de PIND en un registro
+000012 1710                      	CP		R17, R16	//Compara los registros, salta si son diferentes
+000013 f3e9                      	BREQ	MAIN		//Regresa al loop principal
+000014 940e 0044                 	CALL	DELAY		//LLama a la subrutina DELAY
+000016 b103                      	IN		R16, PINB	//Coloca el valor del PIND en R16
+000017 1710                      	CP		R17, R16			
+000018 f3c1                      	BREQ	MAIN
                                  	//Volver a leer PIND
-000018 2f10                      	MOV		R17, R16	//Mueve el registro actual al registro previo
-000019 940e 001e                 	CALL	CONTADOR_1
-00001b 940e 0031                 	CALL	CONTADOR_2
-00001d cff2                      	RJMP	MAIN
+000019 2f10                      	MOV		R17, R16	//Mueve el registro actual al registro previo
+00001a 9b19                      	SBIS	PINB, 1
+00001b 940e 002e                 	CALL	SUM_1
+00001d 9b18                      	SBIS	PINB, 0
+00001e 940e 0033                 	CALL	RESTA_1
+000020 9b1b                      	SBIS	PINB, 3
+000021 940e 0039                 	CALL	SUM_2
+000023 9b1a                      	SBIS	PINB, 2
+000024 940e 003e                 	CALL	RESTA_2
+                                 	//Muestro los datos en el PORTB
+000026 2f54                      	MOV		R21, R20
+000027 0f55                      	LSL		R21
+000028 0f55                      	LSL		R21
+000029 0f55                      	LSL		R21
+00002a 0f55                      	LSL		R21
+00002b 0f53                      	ADD		R21, R19
+00002c b95b                      	OUT		PORTD, R21 	
+00002d cfe3                      	RJMP	MAIN
                                  
                                  //Sub-rutina (no de interrupción)
-                                 CONTADOR_1:
-00001e b109                       	IN		R16, PIND	//Escribe el valor de PIND en un registro
-00001f 1710                      	CP		R17, R16	//Compara los registros, salta si son diferentes
-000020 9508                      	RET					//Regresa al loop principal
-                                 REVISAR_INC_DEC:
-000021 ff03                      	SBRS	R16, 3
-000022 ff02                      	SBRS	R16, 2		//En esta subrutina se selecciona la operación a realizar
-000023 c006                      	RJMP	DECREMENTAR
-000024 c000                      	RJMP	INCREMENTAR
-                                 INCREMENTAR:
-000025 9533                      	INC		R19			//Incrementa R19
-000026 3130                      	CPI		R19, 0x10	//Verifica si sobrepasa el valor máximo
-000027 f439                      	BRNE	ACTUALIZAR	//Actualiza el valor
-000028 e030                      	LDI		R19, 0x00	//Si R19 sobrepasa el valor máximo se resetea
-000029 c005                      	RJMP	ACTUALIZAR
-                                 DECREMENTAR:
-00002a 3030                      	CPI		R19, 0x00	//Verifica si se encuentra en el valor mínimo, si no este salta
-00002b f011                      	BREQ	SET_MAX		//Subrutina
-00002c 953a                      	DEC		R19			//Disminuye el valor de R19
-00002d c001                      	RJMP	ACTUALIZAR
-                                 SET_MAX:
-00002e e03f                      	LDI		R19, 0x0F	//Si baja más del valor mínimo se setea en 0x0F (valor máximo)
-                                 ACTUALIZAR:
-00002f b935                      	OUT		PORTB,R19	//Coloca el valor del contador en el puerto B
-000030 cfdf                      	RJMP	MAIN		//Regresa al loop principal
                                  
-                                 //======================================================================================
+                                 SUM_1:
+00002e 9533                          INC     R19           ; Incrementar R19
+00002f 3130                          CPI     R19, 0x10     ; ¿Llegó a 0x10 (fuera del rango 0x00 - 0x0F)?
+000030 f409                          BRNE    FIN_SUM_1     ; Si no, continuar
+000031 e030                          LDI     R19, 0x00     ; Si sí, reiniciar a 0
+                                 FIN_SUM_1:
+000032 9508                          RET
                                  
-                                 CONTADOR_2:
+                                 RESTA_1:
+000033 3030                          CPI     R19, 0x00     ; ¿Está en 0?
+000034 f011                          BREQ    SET_MAX_1     ; Si sí, colocar en 0x0F
+000035 953a                          DEC     R19           ; Decrementar
+000036 9508                          RET
+                                 SET_MAX_1:
+000037 e03f                          LDI     R19, 0x0F
+000038 9508                          RET
                                  
+                                 SUM_2:
+000039 9543                          INC     R20           ; Incrementar R20
+00003a 3140                          CPI     R20, 0x10     ; ¿Llegó a 0x10 (fuera del rango 0x00 - 0x0F)?
+00003b f409                          BRNE    FIN_SUM_2     ; Si no, continuar
+00003c e040                          LDI     R20, 0x00     ; Si sí, reiniciar a 0
+                                 FIN_SUM_2:
+00003d 9508                          RET
                                  
+                                 RESTA_2:
+00003e 3040                          CPI     R20, 0x00     ; ¿Está en 0?
+00003f f011                          BREQ    SET_MAX_2     ; Si sí, colocar en 0x0F
+000040 954a                          DEC     R20           ; Decrementar
+000041 9508                          RET
+                                 SET_MAX_2:
+000042 e04f                          LDI     R20, 0x0F
+000043 9508                          RET
                                  
                                  //=====================================================================================
                                  
                                  DELAY:		//Antirebote
-000031 ef2f                      	LDI		R18, 0xFF
+000044 ef2f                      	LDI		R18, 0xFF
                                  SUB_DELAY1:
-000032 952a                      	DEC		R18
-000033 3020                      	CPI		R18, 0		//Compara, salta si son iguales
-000034 f7e9                      	BRNE	SUB_DELAY1
-000035 ef2f                      	LDI		R18, 0xFF
+000045 952a                      	DEC		R18
+000046 3020                      	CPI		R18, 0		//Compara, salta si son iguales
+000047 f7e9                      	BRNE	SUB_DELAY1
+000048 ef2f                      	LDI		R18, 0xFF
                                  SUB_DELAY2:
-000036 952a                      	DEC		R18
-000037 3020                      	CPI		R18, 0
-000038 f7e9                      	BRNE	SUB_DELAY2
-000039 ef2f                      	LDI		R18, 0xFF
+000049 952a                      	DEC		R18
+00004a 3020                      	CPI		R18, 0
+00004b f7e9                      	BRNE	SUB_DELAY2
+00004c ef2f                      	LDI		R18, 0xFF
                                  SUB_DELAY3:
-00003a 952a                      	DEC		R18
-00003b 3020                      	CPI		R18, 0
-00003c f7e9                      	BRNE	SUB_DELAY3
-00003d 9508                      	RET
+00004d 952a                      	DEC		R18
+00004e 3020                      	CPI		R18, 0
+00004f f7e9                      	BRNE	SUB_DELAY3
+000050 9508                      	RET
                                  
 
 
@@ -1158,37 +1177,37 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  22 r17:   5 r18:   9 r19:   8 r20:   1 
-r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
+r13:   0 r14:   0 r15:   0 r16:  19 r17:   4 r18:   9 r19:   8 r20:   8 
+r21:   7 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
 r29:   0 r30:   0 r31:   0 
-Registers used: 5 out of 35 (14.3%)
+Registers used: 6 out of 35 (17.1%)
 
 "ATmega328P" instruction use summary:
-.lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
+.lds  :   0 .sts  :   0 adc   :   0 add   :   1 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   0 brcs  :   0 break :   0 breq  :   3 brge  :   0 brhc  :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :   4 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   4 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
-brvs  :   0 bset  :   0 bst   :   0 call  :   3 cbi   :   0 cbr   :   0 
+brne  :   5 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brvs  :   0 bset  :   0 bst   :   0 call  :   5 cbi   :   0 cbr   :   0 
 clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   3 cpc   :   0 
-cpi   :   5 cpse  :   0 dec   :   4 eor   :   0 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   3 inc   :   1 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :  14 lds   :   0 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :   1 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   8 pop   :   0 
-push  :   0 rcall :   0 ret   :   2 reti  :   0 rjmp  :   6 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
-sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   2 sec   :   0 seh   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   2 cpc   :   0 
+cpi   :   7 cpse  :   0 dec   :   5 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   2 inc   :   2 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :  16 lds   :   0 lpm   :   0 lsl   :   4 
+lsr   :   0 mov   :   2 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   9 pop   :   0 
+push  :   0 rcall :   0 ret   :   7 reti  :   0 rjmp  :   1 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   4 
+sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
 sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
 sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 14 out of 113 (12.4%)
+Instructions used: 16 out of 113 (14.2%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00007c    124      0    124   32768   0.4%
+[.cseg] 0x000000 0x0000a2    162      0    162   32768   0.5%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 
