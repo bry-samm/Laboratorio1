@@ -61,6 +61,8 @@ MAIN:
 	CALL	SUM_2
 	SBIS	PINB, 2
 	CALL	RESTA_2
+	SBIS	PINB, 4
+	CALL	TOTAL
 	//Muestro los datos en el PORTB
 	MOV		R21, R20
 	LSL		R21
@@ -105,7 +107,15 @@ RESTA_2:
     RET
 SET_MAX_2:
     LDI     R20, 0x0F
-    RET
+    RET		
+
+//====================================================================================
+
+TOTAL:
+	MOV		R22, R20
+	ADD		R22, R19
+	OUT		PORTC, R22
+	RET		
 
 //=====================================================================================
 
