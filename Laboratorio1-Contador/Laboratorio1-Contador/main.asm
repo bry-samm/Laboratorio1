@@ -42,6 +42,14 @@ SETUP:
 	LDI		R19, 0x00   //Inicializa el contador 1 en 0
 	LDI		R17, 0x00	//Variable para guardar estado de botones
 
+//===================================================================================
+//Prescaler del oscilador
+	LDI		R16, (1 << CLKPCE)    ; Habilita la escritura en CLKPR
+	STS		CLKPR, R16
+	LDI		R16, (1 << CLKPS2)     ; Configura prescaler a 16 (16 MHz / 16 = 1 MHz)
+	STS		CLKPR, R16
+//====================================================================================
+
 //Loop infinito (ciclo infinito)
 MAIN:
  	IN		R16, PINB	//Escribe el valor de PIND en un registro
