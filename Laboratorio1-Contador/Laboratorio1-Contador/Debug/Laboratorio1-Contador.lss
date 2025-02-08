@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm Fri Feb 07 19:47:14 2025
+AVRASM ver. 2.2.8  C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm Fri Feb 07 20:31:06 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
 C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Laboratorio1-Contador\main.asm(8): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\M328PDEF.inc'
@@ -1083,7 +1083,7 @@ C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Lab
                                  
                                  //Loop infinito (ciclo infinito)
                                  MAIN:
-000017 b103                       	IN		R16, PINB	//Escribe el valor de PIND en un registro
+000017 b103                       	IN		R16, PINB	//Escribe el valor de PINB en un registro
 000018 1710                      	CP		R17, R16	//Compara los registros, salta si son diferentes
 000019 f3e9                      	BREQ	MAIN		//Regresa al loop principal
 00001a 940e 0051                 	CALL	DELAY		//LLama a la subrutina DELAY
@@ -1110,6 +1110,7 @@ C:\Users\bsmor\OneDrive\Documentos\GitHub\Laboratorio1\Laboratorio1-Contador\Lab
 000034 0f53                      	ADD		R21, R19	//Suma registros para tener dos contadores en un mismo puerto 
 000035 b95b                      	OUT		PORTD, R21 	
 000036 cfe0                      	RJMP	MAIN
+                                 
                                  
                                  //Sub-rutina (no de interrupción)
                                  
