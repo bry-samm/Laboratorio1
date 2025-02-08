@@ -56,12 +56,11 @@ MAIN:
 	CP		R17, R16	//Compara los registros, salta si son diferentes
 	BREQ	MAIN		//Regresa al loop principal
 	CALL	DELAY		//LLama a la subrutina DELAY
-	IN		R16, PINB	//Coloca el valor del PIND en R16
+	IN		R16, PINB	//Vuelve a hacer el mismo procedimiento para verificar
 	CP		R17, R16			
 	BREQ	MAIN
-	//Volver a leer PIND
 	MOV		R17, R16	//Mueve el registro actual al registro previo
-	SBIS	PINB, 1
+	SBIS	PINB, 1		//Salta si el bit está encendido 
 	CALL	SUM_1
 	SBIS	PINB, 0
 	CALL	RESTA_1
@@ -73,11 +72,11 @@ MAIN:
 	CALL	TOTAL
 	//Muestro los datos en el PORTB
 	MOV		R21, R20
+	LSL		R21			//Mueve el valor del registro hacia la izquierda completando con 0
 	LSL		R21
 	LSL		R21
 	LSL		R21
-	LSL		R21
-	ADD		R21, R19
+	ADD		R21, R19	//Suma registros para tener dos contadores en un mismo puerto 
 	OUT		PORTD, R21 	
 	RJMP	MAIN
 
@@ -85,7 +84,7 @@ MAIN:
 
 SUM_1:
     INC     R19           ; Incrementar R19
-    CPI     R19, 0x10     ; ¿Llegó a 0x10 (fuera del rango 0x00 - 0x0F)?
+    CPI     R19, 0x10     ; ¿Llegó a 0x10?
     BRNE    FIN_SUM_1     ; Si no, continuar
     LDI     R19, 0x00     ; Si sí, reiniciar a 0
 FIN_SUM_1:
@@ -93,7 +92,7 @@ FIN_SUM_1:
 
 RESTA_1:
     CPI     R19, 0x00     ; ¿Está en 0?
-    BREQ    SET_MAX_1     ; Si sí, colocar en 0x0F
+    BREQ    SET_MAX_1     ; Si, colocar en 0x0F
     DEC     R19           ; Decrementar
     RET
 SET_MAX_1:
