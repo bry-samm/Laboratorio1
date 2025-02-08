@@ -52,7 +52,7 @@ SETUP:
 
 //Loop infinito (ciclo infinito)
 MAIN:
- 	IN		R16, PINB	//Escribe el valor de PIND en un registro
+ 	IN		R16, PINB	//Escribe el valor de PINB en un registro
 	CP		R17, R16	//Compara los registros, salta si son diferentes
 	BREQ	MAIN		//Regresa al loop principal
 	CALL	DELAY		//LLama a la subrutina DELAY
@@ -79,6 +79,7 @@ MAIN:
 	ADD		R21, R19	//Suma registros para tener dos contadores en un mismo puerto 
 	OUT		PORTD, R21 	
 	RJMP	MAIN
+
 
 //Sub-rutina (no de interrupción)
 
