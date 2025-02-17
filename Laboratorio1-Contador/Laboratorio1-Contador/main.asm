@@ -72,6 +72,7 @@ MAIN:
 	CALL	TOTAL
 	//Muestro los datos en el PORTB
 	MOV		R21, R20
+	//SWAP R21			//intercambia los nibble
 	LSL		R21			//Mueve el valor del registro hacia la izquierda completando con 0
 	LSL		R21
 	LSL		R21
